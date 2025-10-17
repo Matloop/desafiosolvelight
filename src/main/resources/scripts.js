@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartCount = document.getElementById('cart-count');
   const productList = document.getElementById('product-list');
   let totalPrice = 0.0;
-  const notesList = new Map()
+  let notesList = new Map()
 
   let numberOfProducts = 0;
 
@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch(error){
             console.log('Erro ao adicionar produto')
         }
-
     }
     if(numberOfProducts < 10){
         saveProduct(product)
@@ -35,21 +34,20 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(productPriceInput)
         console.log(price)
         totalPrice = price + totalPrice
+        localStorage.setItem("total", totalPrice)
         console.log(totalPrice)
         const listItem = document.createElement('li');
         listItem.textContent = `${name} - R$ ${price}`;
         productList.appendChild(listItem);
-
         productNameInput.value = '';
         productPriceInput.value = '';
-    } else {
-
     }
+
     
   });
 
   document.getElementById('complete-order').addEventListener('click', () => {
-    async function getNotes(total){
+      async function getNotes(total){
         const baseUrl = 'http://localhost:8080/total';
         const completeUrl = `${baseUrl}/${total}`
         
@@ -61,23 +59,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            const list = document.getElementById('notes-list');
-            list.innerHTML = ''; 
+            console.log(data)
+            console.log(productList)
+            localStorage.setItem("products", JSON.stringify(productList))
+            localStorage.setItem("notes", JSON.stringify(data))
 
-            Object.entries(data).forEach(([note, quantity]) => {
-            const item = document.createElement('li');
-            item.textContent = `Nota de R$${note}: ${quantity}x`;
-            list.appendChild(item);
-            });
+            window.location.href = "confirmation.html";
             return data
-            
 
         } catch(error){
             console.error('Ocorreu erro')
         }
     }
-    notesList = getNotes(totalPrice)
-    
+    console.log(getNotes(localStorage.getItem("total")));
+    notesList = getNotes(localStorage.getItem("total"))
+
     });
     
 });
