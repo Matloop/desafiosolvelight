@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const listItem = document.createElement('li');
         listItem.textContent = `${name} - R$ ${price}`;
         productList.appendChild(listItem);
+        localStorage.setItem("products", productList.innerHTML)
         productNameInput.value = '';
         productPriceInput.value = '';
     }
@@ -61,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             console.log(data)
             console.log(productList)
-            localStorage.setItem("products", JSON.stringify(productList))
             localStorage.setItem("notes", JSON.stringify(data))
 
             window.location.href = "confirmation.html";
@@ -75,7 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
     notesList = getNotes(localStorage.getItem("total"))
 
     });
-    
+
+
 });
+
+
 
 

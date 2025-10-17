@@ -1,21 +1,23 @@
 window.addEventListener("DOMContentLoaded", () => {
-    const list = document.getElementById('notes-list')
-    list.innerHTML = '';
-    const savedProducts = JSON.parse(localStorage.getItem("notes"));
-    const productsList = JSON.parse(localStorage.getItem("products"))
-    Object.entries(savedProducts).forEach(([note, quantity]) => {
+    const listNotes = document.getElementById('notes-list')
+    const listProducts = document.getElementById('products-list')
+    listProducts.innerHTML = '';
+    listNotes.innerHTML = '';
+    const savedNotes = JSON.parse(localStorage.getItem("notes"));
+    const savedProductsHTML = localStorage.getItem("products") ;
+    Object.entries(savedNotes).forEach(([note, quantity]) => {
         const item = document.createElement('li');
         if(parseInt(note) !== 3) {
             item.textContent = `Nota de R$${note}: ${quantity}x`;
         } else{
+            quantity = quantity * 100
             item.textContent = `O troco é de ${quantity} centavos`;
         }
+        listNotes.appendChild(item);
+    })
+    if (savedProductsHTML) {
+        listProducts.innerHTML = savedProductsHTML;
+    }
 
-        list.appendChild(item);
-    })
-    Object.entries(productsList).forEach(([name, price]) => {
-        const item = document.createElement('li');
-        item.textContent = `Produto adicionado ${name} ${price}`
-    })
 })
 
